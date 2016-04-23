@@ -10,7 +10,7 @@ CONFIGFILE=($HOME)/client.conf
 ACTION=NULL
 MODE=0
 RETCODE=0
-MESSAGE_LOGIN=="You have login successfully."
+MESSAGE_LOGIN=="You have successfully logged in"
 TEMP=1
 PARAM=inputParameters
 EXPLICIT=NULL
@@ -25,7 +25,7 @@ PAGE=page
 Error(){
     echo -n "Error: "
     case $RETCODE in
-      1) echo "Something went wrong. Wget failed"
+      1) echo "Something went wrong. Wget failed";;
       2) echo "Parse error in wget command. Please test  check command options.";;
       3) echo "File I/O error in Wget. Please ensure that the script has read and write permission in $HOME and /tmp";;
       4) echo "Netwok Failure. Could not connect to server.";;
@@ -41,4 +41,22 @@ Error(){
  esac
  rm ${OUTPUT} 2> /dev/null
  exit $RETCODE
+}
+login(){
+  ACTION=Login
+  Mode=191
+  wget --timeout=10 --tries=3 -d --post-data="username=${USERNAME}&password=${PASSWORD}&mode=${MODE}&btnsubmit=${ACTION}" "http://${SERVER}:${PORT}/${PAGE}" -0 ${OUTPUT} -o ${LOGFILE} 2> /dev/null
+  RETCODE=$?
+  if ["$RETCODE" -gt 0];
+   then
+    error
+  fi
+  RESPONSE=`cat ${OUTPUT}| sed 's/<message><!\[CDATA\[/&\n/;s/.*\n//;s/]]><\/message>/\n&/;s/\n.*//'`
+  if ["$RESPONSE"=="$ {MESSAGE_LOGIN}"];
+   then
+    echo "Logged In"
+  else
+    RETCODE=201
+    error
+  fi
 }
