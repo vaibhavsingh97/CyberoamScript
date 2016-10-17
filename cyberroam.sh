@@ -1,7 +1,7 @@
 #!/bin/bash
 ############################################################
 ## (c) 2016 Vaibhav Singh                                 ##
-## Author:VAibhav Singh <vaibhav.singh.14cse@bml.edu.in>  ##
+## Author:Vaibhav Singh <vaibhav.singh.14cse@bml.edu.in>  ##
 ############################################################
 LOGFILE=($HOME)/.cyberoamlog
 OUTPUT=/tmp/.cyberoamout
